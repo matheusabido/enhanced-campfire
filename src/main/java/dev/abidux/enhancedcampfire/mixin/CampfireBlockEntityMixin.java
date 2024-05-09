@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CampfireCookingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -57,8 +58,9 @@ public class CampfireBlockEntityMixin extends BlockEntity {
             boolean isItemReady = entity.cookingProgress[i] + 1 >= entity.cookingTime[i];
             if (!isItemReady) continue;
 
-            CampfireCookingRecipe recipe = entity.quickCheck.getRecipeFor(new SimpleContainer(item), level).orElse(null);
-            if (recipe == null) continue; // might be impossible but what if
+            RecipeHolder<CampfireCookingRecipe> recipeHolder = entity.quickCheck.getRecipeFor(new SimpleContainer(item), level).orElse(null);
+            if (recipeHolder == null) continue; // might be impossible but what if
+            CampfireCookingRecipe recipe = recipeHolder.value();
             ItemStack resultItem = recipe.getResultItem(null).copy(); // parameter seems not to change anything
 
             if (Config.CAMPFIRE_SUPPORT_HOPPERS && handleHopper(entity, level, resultItem, i))

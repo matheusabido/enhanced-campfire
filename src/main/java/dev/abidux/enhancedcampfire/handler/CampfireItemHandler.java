@@ -3,6 +3,7 @@ package dev.abidux.enhancedcampfire.handler;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CampfireCookingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.entity.CampfireBlockEntity;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
@@ -31,8 +32,8 @@ public class CampfireItemHandler implements IItemHandler {
         ItemStack item = stack.copy();
         if (entity.getLevel() == null) return item;
 
-        Optional<CampfireCookingRecipe> optionalRecipe = entity.quickCheck.getRecipeFor(new SimpleContainer(item), entity.getLevel());
-        if (optionalRecipe.isEmpty()) return item; // recipe not registered
+        RecipeHolder<CampfireCookingRecipe> recipeHolder = entity.quickCheck.getRecipeFor(new SimpleContainer(item), entity.getLevel()).orElse(null);
+        if (recipeHolder == null) return item; // recipe not registered
 
         if (simulate) {
             for (ItemStack current : entity.getItems()) {
@@ -42,7 +43,7 @@ public class CampfireItemHandler implements IItemHandler {
             return item; // insufficient space
         }
 
-        CampfireCookingRecipe recipe = optionalRecipe.get();
+        CampfireCookingRecipe recipe = recipeHolder.value();
         if (!entity.placeFood(null, stack, recipe.getCookingTime()))
             return item; // insufficient space
 
