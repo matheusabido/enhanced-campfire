@@ -3,7 +3,7 @@
 	"minVersion": "0.8",
 	"compatibilityLevel": "JAVA_17",
 	"package": "dev.abidux.enhancedcampfire.mixin",
-	"refmap": "mixins.enhancedcampfire.refmap.json",
+	"refmap": "enhanced-campfire-refmap.json",
 	"mixins": [
 		"CampfireBlockEntityMixin",
 		"CampfireBlockMixin",
